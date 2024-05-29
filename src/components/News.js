@@ -3,7 +3,6 @@ import NewsItem from './NewsItem'
 import Spinner from './Spinner';
 import PropTypes from 'prop-types'
 
-
 export class News extends Component {
 
     static defaultProps = {
@@ -27,8 +26,8 @@ export class News extends Component {
         }
     }
 
-    async componentDidMount() {
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=66bd6be758cb406eab30a52aca74a70b&page=1&pageSize=${this.props.pageSize}`;
+    async updateNews() {
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=66bd6be758cb406eab30a52aca74a70b&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({ loading: true });
         await fetch(url).then((response) => {
             response.json().then((news) => {
@@ -37,26 +36,35 @@ export class News extends Component {
         })
     }
 
+    async componentDidMount() {
+        this.updateNews();
+    }
+
     handleNextClick = async () => {
-        if (!(this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize))) {
-            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=66bd6be758cb406eab30a52aca74a70b&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
-            this.setState({ loading: true });
-            await fetch(url).then((response) => {
-                response.json().then((news) => {
-                    this.setState({ articles: news.articles, page: this.state.page + 1, loading: false })
-                })
-            })
-        }
+        // if (!(this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize))) {
+        //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=66bd6be758cb406eab30a52aca74a70b&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+        //     this.setState({ loading: true });
+        //     await fetch(url).then((response) => {
+        //         response.json().then((news) => {
+        //             this.setState({ articles: news.articles, page: this.state.page + 1, loading: false })
+        //         })
+        //     })
+        // }
+
+        this.setState({ page: this.state.page + 1 })
+        this.updateNews();
     }
 
     handlePrevClick = async () => {
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=66bd6be758cb406eab30a52aca74a70b&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
-        this.setState({ loading: true });
-        await fetch(url).then((response) => {
-            response.json().then((news) => {
-                this.setState({ articles: news.articles, page: this.state.page - 1, loading: false })
-            })
-        })
+        // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=66bd6be758cb406eab30a52aca74a70b&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+        // this.setState({ loading: true });
+        // await fetch(url).then((response) => {
+        //     response.json().then((news) => {
+        //         this.setState({ articles: news.articles, page: this.state.page - 1, loading: false })
+        //     })
+        // })
+        this.setState({ page: this.state.page - 1 })
+        this.updateNews();
     }
 
     render() {
@@ -67,7 +75,7 @@ export class News extends Component {
                 <div className="row">
                     {!this.state.loading && this.state.articles.map((element) => {
                         return <div className="col-md-4" key={element.url}>
-                            <NewsItem title={element.title} description={element.description} imageUrl={element.urlToImage} newsUrl={element.url} />
+                            <NewsItem title={element.title} description={element.description} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
                         </div>
                     })}
                 </div>
