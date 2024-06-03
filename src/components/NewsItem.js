@@ -1,7 +1,5 @@
 import React from 'react'
 
-// export class NewsItem extends Component {
-// render() {
 const NewsItem = ({
     title = '',
     description = '',
