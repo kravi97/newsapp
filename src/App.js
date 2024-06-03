@@ -5,7 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom'
 import LoadingBar from 'react-top-loading-bar'
 
-// export default class App extends Component {
 const App = () => {
   const pageSize = 15;
   const apiKey = process.env.REACT_APP_NEWS_API
@@ -15,11 +14,7 @@ const App = () => {
     <div>
       <Router>
         <Navbar />
-        <LoadingBar
-          color='#f11946'
-          height={3}
-          progress={progress}
-        />
+        <LoadingBar color='#f11946' height={3} progress={progress} />
         <Routes>
           <Route exact path='/' element={<News setProgress={setProgress} apiKey={apiKey} key='general' pageSize={pageSize} country='in' category='general' />} />
           <Route exact path='/business' element={<News setProgress={setProgress} apiKey={apiKey} key='business' pageSize={pageSize} country='in' category='business' />} />
